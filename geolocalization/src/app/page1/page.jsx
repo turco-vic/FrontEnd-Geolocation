@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useEffect, useState, useRef } from "react";
 import styles from "./page1.module.css";
 
@@ -22,34 +23,29 @@ export default function Geolocalizacao() {
                 const coords = [pos.coords.longitude, pos.coords.latitude];
                 setLocalizacao(coords);
 
-                mapboxgl.accesToken = TOKEN;
+                mapboxgl.accessToken = TOKEN;
                 const map = new mapboxgl.Map({
                     container: mapaRef.current,
-                    style: "mapbox://styles/mapbox/streets-v11",
+                    style: "mapbox://styles/mapbox/streets-v12",
                     center: coords,
-                    zoom: 14,
+                    zoom: 12,
                 });
-                new mapboxgl.Marker({ color: "#FF0000" })
-                    .setLngLat(coords)
-                    .setPopup(
-                        new mapboxgl.Popup().setHTML(
-                            "<strong>Você está aqui!</strong>"
-                        )
-                    )
-                    .addTo(map);
 
+                new mapboxgl.Marker({ color: "#FF0000" }).setLngLat(coords).setPopup(
+                    "<strong>Você está aqui</strong>"
+                );
             },
-                () => alert("Erro ao obter localização")
+            () => alert("Não foi possível obter sua localização")
             );
         };
         document.body.appendChild(script);
-
+        
     }, []);
 
     return (
         <div className={styles.container}>
             <div ref={mapaRef} className={styles.mapa}>
-                {localizacao && (
+                {localizacao  && (
                     <div className={styles.info}>
                         <h2>Localização Atual</h2>
                         <p>Longitude: {localizacao[0].toFixed(2)}</p>
